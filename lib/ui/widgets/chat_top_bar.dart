@@ -38,6 +38,51 @@ class ChatTopBar extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(width: 50),
+        Wrap(
+          children: [
+            IconButton(
+                onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('BÁO CÁO'),
+                        content: const Text(
+                            'Bạn chắc chắn muốn hủy tương hợp với người này chứ?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    ),
+                icon: Icon(Icons.flag)),
+            IconButton(
+                onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Hủy tương hợp'),
+                        content: const Text(
+                            'Bạn chắc chắn muốn hủy tương hợp với người này chứ?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    ),
+                icon: Icon(Icons.cancel))
+          ],
+        )
       ],
     );
   }

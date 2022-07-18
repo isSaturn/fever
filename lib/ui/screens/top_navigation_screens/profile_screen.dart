@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 10,
             ),
             Text(
-              "SETTINGS",
+              "Thiết lập",
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -188,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 10,
               ),
               Text(
-                "ADD MEDIA",
+                "ADD AVATAR",
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -226,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 10,
             ),
             Text(
-              "EDIT INFO",
+              "Chỉnh sửa",
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

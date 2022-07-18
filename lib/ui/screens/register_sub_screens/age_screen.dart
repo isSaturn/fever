@@ -39,21 +39,22 @@ class _AgeScreenState extends State<AgeScreen> {
           child: Center(
             child: Container(
               child: NumberPicker(
-                  itemWidth: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Color.fromARGB(255, 212, 0, 255), width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  value: age,
-                  minValue: 0,
-                  maxValue: 120,
-                  onChanged: (value) => {
-                        setState(() {
-                          age = value;
-                        }),
-                        widget.onChanged(value)
-                      }),
+                itemWidth: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Color.fromARGB(255, 212, 0, 255), width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                value: age,
+                minValue: 0,
+                maxValue: 120,
+                onChanged: (value) => {
+                  setState(() {
+                    age = value;
+                  }),
+                  widget.onChanged(value)
+                },
+              ),
             ),
           ),
         ),
