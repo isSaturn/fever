@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 10,
                         blurRadius: 15,
                         // changes position of shadow
@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Icon(
                   Icons.settings,
                   size: 35,
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withOpacity(1),
                 ),
               ),
             ),
@@ -209,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 10,
                         blurRadius: 15,
                         // changes position of shadow
@@ -218,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Icon(
                   Icons.edit,
                   size: 35,
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withOpacity(1),
                 ),
               ),
             ),

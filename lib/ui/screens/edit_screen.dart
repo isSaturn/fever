@@ -50,7 +50,6 @@ class _EditScreenState extends State<EditScreen> {
                         userProvider.user == null || userProvider.isLoading,
                     child: userSnapshot.hasData
                         ? Column(children: [
-                            getProfileImage(userSnapshot.data, userProvider),
                             SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -195,24 +194,6 @@ class _EditScreenState extends State<EditScreen> {
         labelText: 'Name',
         startInputText: user.name,
       ),
-    );
-  }
-
-  Widget getProfileImage(AppUser user, UserProvider firebaseProvider) {
-    return Stack(
-      children: [
-        Container(
-          // ignore: sort_child_properties_last
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(user.profilePhotoPath),
-            radius: 75,
-          ),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: kAccentColor, width: 1.0),
-          ),
-        ),
-      ],
     );
   }
 }
