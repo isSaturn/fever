@@ -1,3 +1,5 @@
+import 'package:fever/data/db/entity/match.dart';
+import 'package:fever/ui/screens/top_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fever/data/db/entity/app_user.dart';
 import 'package:fever/data/db/entity/chat.dart';
@@ -51,12 +53,48 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: StreamBuilder<DocumentSnapshot>(
-                stream: _databaseSource.observeUser(otherUserId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return Container();
-                  return ChatTopBar(user: AppUser.fromSnapshot(snapshot.data));
-                })),
+          title: StreamBuilder<DocumentSnapshot>(
+            stream: _databaseSource.observeUser(otherUserId),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return Container();
+              return ChatTopBar(
+                user: AppUser.fromSnapshot(snapshot.data),
+              );
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.flag),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.cancel),
+              onPressed: () => showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Hủy tương hợp'),
+                  content: const Text(
+                      'Bạn chắc chắn muốn hủy tương hợp với người này chứ?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _databaseSource.unMatch(myUserId, Match(id));
+                        _databaseSource.unMatch(otherUserId, Match(id));
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            TopNavigationScreen.id, (route) => false);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
         body: Column(children: [
           Expanded(
               child: StreamBuilder<QuerySnapshot>(

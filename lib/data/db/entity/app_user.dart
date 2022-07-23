@@ -7,14 +7,27 @@ class AppUser {
   int age;
   String profilePhotoPath;
   String majors = "";
-  String location = "";
   String bio = "";
+  List<String> interests = [];
+  String country;
+  String state;
+  String city;
+  String gender;
+  String preference;
+  bool isOnline;
 
   AppUser({
     @required this.id,
     @required this.name,
     @required this.age,
     @required this.profilePhotoPath,
+    @required this.interests,
+    @required this.country,
+    @required this.state,
+    @required this.city,
+    @required this.gender,
+    @required this.preference,
+    @required this.isOnline,
   });
 
   AppUser.fromSnapshot(DocumentSnapshot snapshot) {
@@ -23,8 +36,14 @@ class AppUser {
     age = snapshot['age'];
     profilePhotoPath = snapshot['profile_photo_path'];
     majors = snapshot.get('majors') ?? '';
-    location = snapshot.get('location') ?? '';
     bio = snapshot.get('bio') ?? '';
+    interests = snapshot['interests'].cast<String>();
+    country = snapshot['country'];
+    state = snapshot['state'];
+    city = snapshot['city'];
+    gender = snapshot['gender'];
+    preference = snapshot['preference'];
+    isOnline = snapshot['isOnline'];
   }
 
   Map<String, dynamic> toMap() {
@@ -34,8 +53,14 @@ class AppUser {
       'age': age,
       'profile_photo_path': profilePhotoPath,
       'majors': majors,
-      'location': location,
-      'bio': bio
+      'bio': bio,
+      'interests': interests,
+      'country': country,
+      'state': state,
+      'city': city,
+      'gender': gender,
+      'preference': preference,
+      'isOnline': isOnline,
     };
   }
 }

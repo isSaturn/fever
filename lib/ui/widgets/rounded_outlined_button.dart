@@ -11,6 +11,7 @@ class RoundedOutlinedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
+      height: 53,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           shape: const StadiumBorder(),

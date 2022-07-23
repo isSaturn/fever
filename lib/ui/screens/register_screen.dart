@@ -1,3 +1,7 @@
+import 'package:fever/ui/screens/gender_screen.dart';
+import 'package:fever/ui/screens/interests_screen.dart';
+import 'package:fever/ui/screens/location_screen.dart';
+import 'package:fever/ui/screens/preference_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +29,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final UserRegistration _userRegistration = UserRegistration();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _endScreenIndex = 3;
+  final int _endScreenIndex = 7;
   int _currentScreenIndex = 0;
   bool _isLoading = false;
   UserProvider _userProvider;
@@ -74,22 +78,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
             onChanged: (value) => {_userRegistration.name = value});
       case 1:
         return AgeScreen(onChanged: (value) => {_userRegistration.age = value});
+
       case 2:
         return AddPhotoScreen(
             onPhotoChanged: (value) =>
                 {_userRegistration.localProfilePhotoPath = value});
       case 3:
+        return Gender(onChanged: (value) => {_userRegistration.gender = value});
+      case 4:
+        return Preference(
+            onChanged: (value) => {_userRegistration.preference = value});
+      case 5:
+        print("get subscreen case 3");
+        return InterestsScreen(onInterestsChanged: (value) {
+          print("list : ${value.toString()}");
+          _userRegistration.interests = value;
+        });
+
+      case 6:
+        return Location(onChanged: (value) {
+          _userRegistration.city = value['city'];
+          _userRegistration.state = value['state'];
+          _userRegistration.country = value['country'];
+        });
+      case 7:
         return Form(
           key: _formKey,
           child: EmailAndPasswordScreen(
               emailValidator: (value) {
                 if (value.isEmpty) {
-                  return ("Please Enter Your Email");
+                  return ("Vui lòng điền Email");
                 }
                 // reg expression for email validation
                 if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                     .hasMatch(value)) {
-                  return ("Please Enter a valid email");
+                  return ("Vui lòng nhập đúng Email");
                 }
                 if (!RegExp("@vanlanguni.vn").hasMatch(value)) {
                   return ("Please use domain name @vanlanguni.vn");
@@ -101,10 +124,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               passwordValidator: (value) {
                 RegExp regex = new RegExp(r'^.{6,}$');
                 if (value.isEmpty) {
-                  return ("Password is required for login");
+                  return ("Vui lòng điền mật khẩu");
                 }
                 if (!regex.hasMatch(value)) {
-                  return ("Enter Valid Password(Min. 6 Character)");
+                  return ("Mật khẩu không hơp lệ (Ít nhất 6 ký tự)");
                 }
               },
               passwordOnChanged: (value) =>
@@ -120,9 +143,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       case 0:
         return (_userRegistration.name.length >= 2);
       case 1:
-        return (_userRegistration.age >= 13 && _userRegistration.age <= 120);
+        return (_userRegistration.age >= 18 && _userRegistration.age <= 120);
       case 2:
         return _userRegistration.localProfilePhotoPath.isNotEmpty;
+      case 3:
+        return (_userRegistration.gender.length > 1);
+      case 4:
+        return (_userRegistration.preference.length > 1);
+      case 5:
+        return (_userRegistration.interests.isNotEmpty);
+      case 6:
+        return (_userRegistration.city.isNotEmpty);
       default:
         return false;
     }
@@ -131,11 +162,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String getInvalidRegistrationMessage() {
     switch (_currentScreenIndex) {
       case 0:
-        return "Name is too short";
+        return "Tên quá ngắn";
       case 1:
-        return "Invalid age";
+        return "Bạn chưa đủ tuổi";
       case 2:
-        return "Invalid photo";
+        return "Vui lòng chọn ảnh";
+      case 3:
+        return "Vui lòng chọn giới tính";
+      case 4:
+        return 'Vui lòng chọn đối tượng tìm kiếm';
+      case 5:
+        return "Vui lòng chọn sở thích";
+      case 6:
+        return 'Vui lòng chọn vị trí';
       default:
         return "";
     }
@@ -147,7 +186,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
-        appBar: AppBar(title: Text('Register')),
+        appBar: AppBar(title: Text('Đăng ký')),
         body: CustomModalProgressHUD(
           inAsyncCall: _isLoading,
           child: Container(
@@ -194,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: kDefaultPadding,
                   child: _currentScreenIndex == (_endScreenIndex)
                       ? RoundedButton(
-                          text: 'REGISTER',
+                          text: 'GÉT GÔ!',
                           onPressed: _isLoading == false
                               ? () => {
                                     if (_formKey.currentState.validate())
@@ -202,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                               : null)
                       : RoundedButton(
-                          text: 'CONTINUE',
+                          text: 'TIẾP THEO',
                           onPressed: () => {
                             if (canContinueToNextSubScreen())
                               setState(() {

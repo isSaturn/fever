@@ -63,7 +63,8 @@ class _SwipeCardState extends State<SwipeCard> {
                 Row(
                   children: [
                     Text(
-                      widget.person.name + ', ',
+                      '${widget.person.name}, ',
+                      // ignore: prefer_const_constructors
                       style: TextStyle(
                           color: white,
                           fontSize: 24,
@@ -71,29 +72,13 @@ class _SwipeCardState extends State<SwipeCard> {
                     ),
                     Text(
                       widget.person.age.toString(),
+                      // ignore: prefer_const_constructors
                       style: TextStyle(
                         color: white,
                         fontSize: 22,
                       ),
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      widget.person.location,
-                      style: TextStyle(
-                        color: white,
-                        fontSize: 16,
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
                 ),
                 Row(
                   children: [
@@ -106,8 +91,8 @@ class _SwipeCardState extends State<SwipeCard> {
                         padding: const EdgeInsets.only(
                             top: 3, bottom: 3, left: 10, right: 10),
                         child: Text(
-                          'Khoa: ' + widget.person.majors,
-                          style: TextStyle(color: white),
+                          'Khoa: ${widget.person.majors.length != 0 ? widget.person.majors : "No info."}',
+                          style: const TextStyle(color: white),
                         ),
                       ),
                     ),

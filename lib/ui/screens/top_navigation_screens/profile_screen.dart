@@ -188,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 10,
               ),
               Text(
-                "ADD AVATAR",
+                "Thay ảnh đại diện",
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

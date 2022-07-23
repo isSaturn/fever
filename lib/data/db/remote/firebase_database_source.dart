@@ -21,6 +21,15 @@ class FirebaseDatabaseSource {
         .set(match.toMap());
   }
 
+  void unMatch(String userId, Match match) {
+    instance
+        .collection('users')
+        .doc(userId)
+        .collection('matches')
+        .doc(match.id)
+        .delete();
+  }
+
   void addChat(Chat chat) {
     instance.collection('chats').doc(chat.id).set(chat.toMap());
   }
@@ -81,12 +90,122 @@ class FirebaseDatabaseSource {
   }
 
   Future<QuerySnapshot> getPersonsToMatchWith(
-      int limit, List<String> ignoreIds) {
-    return instance
-        .collection('users')
-        .where('id', whereNotIn: ignoreIds)
-        .limit(limit)
-        .get();
+      List<String> ignoreIds, String gender, String preference) {
+    print(gender + preference);
+    if (gender == 'male' && preference == 'male') {
+      print("male looking for males");
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'male')
+          .where('preference', isEqualTo: 'male')
+          .get();
+    } else if (gender == 'male' && preference == 'female') {
+      print('male looking for females');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'female')
+          .where('preference', isEqualTo: 'male')
+          .get();
+    } else if (gender == 'male' && preference == 'other') {
+      print('male looking for others');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'other')
+          .where('preference', isEqualTo: 'male')
+          .get();
+    } else if (gender == 'other' && preference == 'male') {
+      print('other looking for males');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'male')
+          .where('preference', isEqualTo: 'other')
+          .get();
+    } else if (gender == 'other' && preference == 'female') {
+      print('other looking for females');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'female')
+          .where('preference', isEqualTo: 'other')
+          .get();
+    } else if (gender == 'other' && preference == 'other') {
+      print('other looking for others');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'other')
+          .where('preference', isEqualTo: 'other')
+          .get();
+    } else if (gender == 'female' && preference == 'female') {
+      print("female looking for females");
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'female')
+          .where('preference', isEqualTo: 'female')
+          .get();
+    } else if (gender == 'female' && preference == 'other') {
+      print("female looking for others");
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'other')
+          .where('preference', isEqualTo: 'female')
+          .get();
+    } else {
+      print('female looking for males');
+      return instance
+          .collection('users')
+          .where('id', whereNotIn: ignoreIds)
+          .where('gender', isEqualTo: 'male')
+          .where('preference', isEqualTo: 'female')
+          .get();
+    }
+  }
+
+  Future<String> getPreference(String userId) async {
+    String gender = '';
+    var docSnapshot = await instance.collection('users').doc(userId).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data();
+
+      // You can then retrieve the value from the Map like this:
+      gender = data['preference'].toString();
+    }
+    return gender;
+  }
+
+  Future<String> getGender(String userId) async {
+    String gender = '';
+    var docSnapshot = await instance.collection('users').doc(userId).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data();
+
+      // You can then retrieve the value from the Map like this:
+      gender = data['gender'].toString();
+    }
+    return gender;
+  }
+
+  Future<List<String>> getInterests(String userId) async {
+    print('get interests');
+    print(userId);
+    List<String> interests = [];
+    var docSnapshot = await instance.collection('users').doc(userId).get();
+    if (docSnapshot.exists) {
+      print('shit');
+      AppUser user = AppUser.fromSnapshot(docSnapshot);
+      Map<String, dynamic> data = docSnapshot.data();
+
+      // You can then retrieve the value from the Map like this:
+      interests = user.interests;
+      print(interests.toString());
+    }
+    return interests;
   }
 
   Future<QuerySnapshot> getSwipes(String userId) {

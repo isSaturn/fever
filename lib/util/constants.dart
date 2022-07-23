@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kDefaultPadding = EdgeInsets.symmetric(
-  vertical: 36.0,
+  vertical: 30.0,
   horizontal: 26.0,
 );
 const double defaultPadding = 16.0;

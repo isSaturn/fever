@@ -72,48 +72,12 @@ class _EditScreenState extends State<EditScreen> {
                             SizedBox(height: 40),
                             getBio(userSnapshot.data, userProvider),
                             getMajors(userSnapshot.data, userProvider),
-                            getLocation(userSnapshot.data, userProvider),
                             Expanded(child: Container()),
                           ])
                         : Container());
               });
         }),
       ),
-    );
-  }
-
-  Widget getLocation(AppUser user, UserProvider userProvider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Location', style: Theme.of(context).textTheme.headline4),
-            RoundedIconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => InputDialog(
-                    onSavePressed: (value) =>
-                        userProvider.updateUserLocation(value),
-                    labelText: 'Location',
-                    startInputText: user.location,
-                  ),
-                );
-              },
-              iconData: Icons.edit,
-              iconSize: 18,
-              paddingReduce: 4,
-            ),
-          ],
-        ),
-        SizedBox(height: 5),
-        Text(
-          user.location.length > 0 ? user.location : "No location.",
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-      ],
     );
   }
 

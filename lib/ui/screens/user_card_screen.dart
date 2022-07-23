@@ -26,11 +26,16 @@ class _UserCardState extends State<UserCard> {
   final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> _ignoreSwipeIds;
+  String preference;
+  String gender;
 
   Future<AppUser> loadPerson(String myUserId) async {
-    if (_ignoreSwipeIds == null) {
-      // ignore: deprecated_member_use
-      _ignoreSwipeIds = List<String>();
+    print("Ignore swipe ids: ");
+    _ignoreSwipeIds = <String>[];
+    if (_ignoreSwipeIds.isEmpty) {
+      print("Made it!");
+      preference = await _databaseSource.getPreference(myUserId);
+      gender = await _databaseSource.getGender(myUserId);
       var swipes = await _databaseSource.getSwipes(myUserId);
       for (var i = 0; i < swipes.size; i++) {
         Swipe swipe = Swipe.fromSnapshot(swipes.docs[i]);
@@ -38,9 +43,12 @@ class _UserCardState extends State<UserCard> {
       }
       _ignoreSwipeIds.add(myUserId);
     }
-    var res = await _databaseSource.getPersonsToMatchWith(1, _ignoreSwipeIds);
+    var res = await _databaseSource.getPersonsToMatchWith(
+        _ignoreSwipeIds, gender, preference);
+    print(res.toString());
     if (res.docs.length > 0) {
       var userToMatchWith = AppUser.fromSnapshot(res.docs.first);
+
       return userToMatchWith;
     } else {
       return null;

@@ -16,6 +16,7 @@ class UserProvider extends ChangeNotifier {
   FirebaseAuthSource _authSource = FirebaseAuthSource();
   FirebaseStorageSource _storageSource = FirebaseStorageSource();
   FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
+  String currentUserId;
 
   bool isLoading = false;
   AppUser _user;
@@ -46,10 +47,18 @@ class UserProvider extends ChangeNotifier {
       if (response is Success<String>) {
         String profilePhotoUrl = response.value;
         AppUser user = AppUser(
-            id: id,
-            name: userRegistration.name,
-            age: userRegistration.age,
-            profilePhotoPath: profilePhotoUrl);
+          id: id,
+          name: userRegistration.name,
+          age: userRegistration.age,
+          profilePhotoPath: profilePhotoUrl,
+          interests: userRegistration.interests,
+          country: userRegistration.country,
+          state: userRegistration.state,
+          city: userRegistration.city,
+          gender: userRegistration.gender,
+          preference: userRegistration.preference,
+          isOnline: true,
+        );
         _databaseSource.addUser(user);
         SharedPreferencesUtil.setUserId(id);
         _user = _user;
@@ -97,12 +106,6 @@ class UserProvider extends ChangeNotifier {
 
   void updateUserMajors(String newMajors) {
     _user.majors = newMajors;
-    _databaseSource.updateUser(_user);
-    notifyListeners();
-  }
-
-  void updateUserLocation(String newLocation) {
-    _user.location = newLocation;
     _databaseSource.updateUser(_user);
     notifyListeners();
   }

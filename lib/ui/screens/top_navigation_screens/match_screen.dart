@@ -24,11 +24,16 @@ class _MatchScreenState extends State<MatchScreen> {
   final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> _ignoreSwipeIds;
+  String preference;
+  String gender;
 
   Future<AppUser> loadPerson(String myUserId) async {
-    if (_ignoreSwipeIds == null) {
-      // ignore: deprecated_member_use
-      _ignoreSwipeIds = List<String>();
+    print("Ignore swipe ids: ");
+    _ignoreSwipeIds = <String>[];
+    if (_ignoreSwipeIds.isEmpty) {
+      print("Made it!");
+      preference = await _databaseSource.getPreference(myUserId);
+      gender = await _databaseSource.getGender(myUserId);
       var swipes = await _databaseSource.getSwipes(myUserId);
       for (var i = 0; i < swipes.size; i++) {
         Swipe swipe = Swipe.fromSnapshot(swipes.docs[i]);
@@ -36,9 +41,12 @@ class _MatchScreenState extends State<MatchScreen> {
       }
       _ignoreSwipeIds.add(myUserId);
     }
-    var res = await _databaseSource.getPersonsToMatchWith(1, _ignoreSwipeIds);
+    var res = await _databaseSource.getPersonsToMatchWith(
+        _ignoreSwipeIds, gender, preference);
+    print(res.toString());
     if (res.docs.length > 0) {
       var userToMatchWith = AppUser.fromSnapshot(res.docs.first);
+
       return userToMatchWith;
     } else {
       return null;
@@ -86,7 +94,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
     return Scaffold(
         key: _scaffoldKey,
-        body: Container(child: Consumer<UserProvider>(
+        body: Consumer<UserProvider>(
           builder: (context, userProvider, child) {
             return FutureBuilder<AppUser>(
               future: userProvider.user,
@@ -102,11 +110,9 @@ class _MatchScreenState extends State<MatchScreen> {
                                     ConnectionState.done &&
                                 !snapshot.hasData) {
                               return Center(
-                                child: Container(
-                                    child: Text('No users',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4)),
+                                child: Text('Có ai ở đây hem?',
+                                    style:
+                                        Theme.of(context).textTheme.headline4),
                               );
                             }
                             if (!snapshot.hasData) {
@@ -116,116 +122,108 @@ class _MatchScreenState extends State<MatchScreen> {
                               );
                             }
                             return Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 10),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SwipeCard(person: snapshot.data),
-                                    Expanded(
-                                      child: Container(
-                                        width: size.width,
-                                        height: 128,
-                                        decoration: BoxDecoration(color: white),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Container(
-                                              width: 58.0,
-                                              height: 58.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color:
-                                                        grey.withOpacity(0.5),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 10,
-                                                    // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: MaterialButton(
-                                                onPressed: () {
-                                                  personSwiped(
-                                                      userSnapshot.data,
-                                                      snapshot.data,
-                                                      false);
-                                                },
-                                                child: Center(
-                                                  child: SvgPicture.asset(
-                                                    'images/icons/close_icon.svg',
-                                                    width: 25.0,
-                                                  ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SwipeCard(person: snapshot.data),
+                                  Expanded(
+                                    child: Container(
+                                      width: size.width,
+                                      height: 128,
+                                      decoration:
+                                          const BoxDecoration(color: white),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                            width: 58.0,
+                                            height: 58.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: grey.withOpacity(0.5),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 10,
+                                                  // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: MaterialButton(
+                                              onPressed: () {
+                                                personSwiped(userSnapshot.data,
+                                                    snapshot.data, false);
+                                              },
+                                              child: Center(
+                                                child: SvgPicture.asset(
+                                                  'images/icons/close_icon.svg',
+                                                  width: 25.0,
                                                 ),
                                               ),
                                             ),
-                                            Container(
-                                              width: 70.0,
-                                              height: 70.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color:
-                                                        grey.withOpacity(0.5),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 10,
-                                                    // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: MaterialButton(
-                                                onPressed: () {
-                                                  personSwiped(
-                                                      userSnapshot.data,
-                                                      snapshot.data,
-                                                      true);
-                                                },
-                                                child: Center(
-                                                  child: SvgPicture.asset(
-                                                    'images/icons/like_icon.svg',
-                                                    width: 30.0,
-                                                  ),
+                                          ),
+                                          Container(
+                                            width: 70.0,
+                                            height: 70.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: grey.withOpacity(0.5),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 10,
+                                                  // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: MaterialButton(
+                                              onPressed: () {
+                                                personSwiped(userSnapshot.data,
+                                                    snapshot.data, true);
+                                              },
+                                              child: Center(
+                                                child: SvgPicture.asset(
+                                                  'images/icons/like_icon.svg',
+                                                  width: 30.0,
                                                 ),
                                               ),
                                             ),
-                                            Container(
-                                              width: 58.0,
-                                              height: 58.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color:
-                                                        grey.withOpacity(0.5),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 10,
-                                                    // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: MaterialButton(
-                                                onPressed: () {},
-                                                child: Center(
-                                                  child: SvgPicture.asset(
-                                                    'images/icons/thunder_icon.svg',
-                                                    width: 20.0,
-                                                  ),
+                                          ),
+                                          Container(
+                                            width: 58.0,
+                                            height: 58.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: grey.withOpacity(0.5),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 10,
+                                                  // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: MaterialButton(
+                                              onPressed: () {},
+                                              child: Center(
+                                                child: SvgPicture.asset(
+                                                  'images/icons/thunder_icon.svg',
+                                                  width: 20.0,
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             );
                           },
@@ -235,6 +233,6 @@ class _MatchScreenState extends State<MatchScreen> {
               },
             );
           },
-        )));
+        ));
   }
 }

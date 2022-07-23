@@ -7,6 +7,8 @@ import 'top_navigation_screens/match_screen.dart';
 class TopNavigationScreen extends StatefulWidget {
   static const String id = 'top_navigation_screen';
 
+  const TopNavigationScreen({Key key}) : super(key: key);
+
   @override
   State<TopNavigationScreen> createState() => _TopNavigationScreenState();
 }
