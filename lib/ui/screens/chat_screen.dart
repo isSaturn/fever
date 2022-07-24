@@ -11,7 +11,7 @@ import 'package:fever/ui/widgets/message_bubble.dart';
 import 'package:fever/util/constants.dart';
 
 class ChatScreen extends StatelessWidget {
-  final ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final FirebaseDatabaseSource _databaseSource = FirebaseDatabaseSource();
   final messageTextController = TextEditingController();
 
@@ -82,8 +82,6 @@ class ChatScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        _databaseSource.unMatch(myUserId, Match(id));
-                        _databaseSource.unMatch(otherUserId, Match(id));
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             TopNavigationScreen.id, (route) => false);
                       },

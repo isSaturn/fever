@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fever/data/model/chat_with_user.dart';
 import 'package:fever/util/constants.dart';
 import 'package:fever/util/utils.dart';
 
-class ChatListTile extends StatelessWidget {
+class ChatListTile extends StatefulWidget {
   final ChatWithUser chatWithUser;
   final Function onTap;
   final Function onLongPress;
@@ -16,9 +17,14 @@ class ChatListTile extends StatelessWidget {
       @required this.myUserId});
 
   @override
+  State<ChatListTile> createState() => _ChatListTileState();
+}
+
+class _ChatListTileState extends State<ChatListTile> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       onLongPress: () {},
       child: Container(
         height: 60,
@@ -29,7 +35,7 @@ class ChatListTile extends StatelessWidget {
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    NetworkImage(chatWithUser.user.profilePhotoPath),
+                    NetworkImage(widget.chatWithUser.user.profilePhotoPath),
               ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -51,11 +57,11 @@ class ChatListTile extends StatelessWidget {
   }
 
   bool isLastMessageMyText() {
-    return chatWithUser.chat.lastMessage.senderId == myUserId;
+    return widget.chatWithUser.chat.lastMessage.senderId == widget.myUserId;
   }
 
   bool isLastMessageSeen() {
-    if (chatWithUser.chat.lastMessage.seen == false &&
+    if (widget.chatWithUser.chat.lastMessage.seen == false &&
         isLastMessageMyText() == false) {
       return false;
     }
@@ -68,20 +74,36 @@ class ChatListTile extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            chatWithUser.user.name,
+            widget.chatWithUser.user.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16),
           ),
         ),
         Container(
-            child: Text(
-                chatWithUser.chat.lastMessage == null
+            child: Wrap(
+          direction: Axis.horizontal,
+          children: <Widget>[
+            Container(
+              width: 13,
+              height: 13,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.chatWithUser.user.isOnline
+                    ? Colors.green.shade500
+                    : Colors.grey.shade800,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+                widget.chatWithUser.chat.lastMessage == null
                     ? ''
                     : convertEpochMsToDateTime(
-                        chatWithUser.chat.lastMessage.epochTimeMs),
+                        widget.chatWithUser.chat.lastMessage.epochTimeMs),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12))),
+                style: TextStyle(fontSize: 12)),
+          ],
+        )),
       ],
     );
   }
@@ -94,10 +116,10 @@ class ChatListTile extends StatelessWidget {
           child: Opacity(
             opacity: 0.6,
             child: Text(
-              chatWithUser.chat.lastMessage == null
+              widget.chatWithUser.chat.lastMessage == null
                   ? "Write something!"
                   : ((isLastMessageMyText() ? "You: " : "") +
-                      chatWithUser.chat.lastMessage.text),
+                      widget.chatWithUser.chat.lastMessage.text),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 14),
@@ -106,7 +128,7 @@ class ChatListTile extends StatelessWidget {
         ),
         SizedBox(
             width: 40,
-            child: chatWithUser.chat.lastMessage == null ||
+            child: widget.chatWithUser.chat.lastMessage == null ||
                     isLastMessageSeen() == false
                 ? Container(
                     width: 8,

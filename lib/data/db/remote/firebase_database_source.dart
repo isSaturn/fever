@@ -5,6 +5,8 @@ import 'package:fever/data/db/entity/match.dart';
 import 'package:fever/data/db/entity/message.dart';
 import 'package:fever/data/db/entity/swipe.dart';
 
+import '../../model/constants.dart';
+
 class FirebaseDatabaseSource {
   final FirebaseFirestore instance = FirebaseFirestore.instance;
 
@@ -19,15 +21,6 @@ class FirebaseDatabaseSource {
         .collection('matches')
         .doc(match.id)
         .set(match.toMap());
-  }
-
-  void unMatch(String userId, Match match) {
-    instance
-        .collection('users')
-        .doc(userId)
-        .collection('matches')
-        .doc(match.id)
-        .delete();
   }
 
   void addChat(Chat chat) {

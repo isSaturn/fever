@@ -41,10 +41,10 @@ class NameScreen extends StatelessWidget {
         SizedBox(height: 25),
         Expanded(
           child: BorderedTextField(
-            labelText: 'Name',
-            onChanged: onChanged,
-            textCapitalization: TextCapitalization.words,
-          ),
+              labelText: 'Name',
+              onChanged: onChanged,
+              textCapitalization: TextCapitalization.words,
+              isBorder: true),
         ),
       ],
     );

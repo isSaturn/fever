@@ -35,6 +35,7 @@ class EmailAndPasswordScreen extends StatelessWidget {
           onChanged: emailOnChanged,
           keyboardType: TextInputType.emailAddress,
           validator: emailValidator,
+          isBorder: true,
         ),
         SizedBox(height: 5),
         BorderedTextField(
@@ -42,6 +43,7 @@ class EmailAndPasswordScreen extends StatelessWidget {
           onChanged: passwordOnChanged,
           obscureText: true,
           validator: passwordValidator,
+          isBorder: true,
         ),
       ],
     );

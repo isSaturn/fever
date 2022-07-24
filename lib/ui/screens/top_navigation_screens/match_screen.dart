@@ -26,6 +26,7 @@ class _MatchScreenState extends State<MatchScreen> {
   List<String> _ignoreSwipeIds;
   String preference;
   String gender;
+  AppUser me;
 
   Future<AppUser> loadPerson(String myUserId) async {
     print("Ignore swipe ids: ");
@@ -86,6 +87,22 @@ class _MatchScreenState extends State<MatchScreen> {
       }
     }
     return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getMe();
+  }
+
+  void getMe() async {
+    AppUser user = await Provider.of<UserProvider>(context, listen: false).user;
+    Provider.of<UserProvider>(context, listen: false).currentUserId = user.id;
+    // String currentId = user.id;
+    DocumentSnapshot snap = await _databaseSource.getUser(
+        Provider.of<UserProvider>(context, listen: false).currentUserId);
+    me = AppUser.fromSnapshot(snap);
   }
 
   @override

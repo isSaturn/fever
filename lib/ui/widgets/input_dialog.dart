@@ -32,13 +32,13 @@ class _InputDialogState extends State<InputDialog> {
       backgroundColor: kBackgroundColor,
       contentPadding: EdgeInsets.all(16.0),
       content: BorderedTextField(
-        textCapitalization: TextCapitalization.sentences,
-        labelText: widget.labelText,
-        autoFocus: true,
-        keyboardType: TextInputType.text,
-        onChanged: (value) => {inputText = value},
-        textController: textController,
-      ),
+          textCapitalization: TextCapitalization.sentences,
+          labelText: widget.labelText,
+          autoFocus: true,
+          keyboardType: TextInputType.text,
+          onChanged: (value) => {inputText = value},
+          textController: textController,
+          isBorder: true),
       actions: <Widget>[
         FlatButton(
           color: kColorPrimaryVariant,

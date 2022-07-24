@@ -1,7 +1,6 @@
-import 'package:fever/ui/screens/gender_screen.dart';
-import 'package:fever/ui/screens/interests_screen.dart';
-import 'package:fever/ui/screens/location_screen.dart';
 import 'package:fever/ui/screens/preference_screen.dart';
+import 'package:fever/ui/screens/register_sub_screens/interests_screen.dart';
+import 'package:fever/ui/screens/register_sub_screens/location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +17,8 @@ import 'package:fever/ui/widgets/rounded_button.dart';
 import 'package:fever/util/constants.dart';
 import 'package:fever/util/utils.dart';
 import 'package:fever/ui/screens/start_screen.dart';
+
+import 'register_sub_screens/gender_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
@@ -115,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return ("Vui lòng nhập đúng Email");
                 }
                 if (!RegExp("@vanlanguni.vn").hasMatch(value)) {
-                  return ("Please use domain name @vanlanguni.vn");
+                  return ("Tên miền bắt buộc là @vanlanguni.vn");
                 }
                 return null;
               },

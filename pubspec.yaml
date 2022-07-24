@@ -53,6 +53,7 @@ dependencies:
   flutter_custom_clippers: ^2.0.0
   fluttertoast: ^8.0.9
   csc_picker: ^0.2.6
+  mobx: ^2.0.6+1
 
   #Icon_launcer
 flutter_icons:
@@ -86,6 +87,8 @@ flutter:
   assets:
     - images/
     - images/icons/
+    - .env
+
   fonts:
     - family: Nunito
       fonts:

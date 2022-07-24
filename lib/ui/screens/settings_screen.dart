@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fever/data/db/entity/app_user.dart';
@@ -52,6 +53,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             RoundedButton(
                               text: 'LOGOUT',
                               onPressed: () {
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userProvider.currentUserId)
+                                    .update({'isOnline': false});
                                 logoutPressed(userProvider, context);
                               },
                             ),
